@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body style="margin:0">
+<title>Looksmaxxing Hub</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Share+Tech+Mono&display=swap">
+<style>
+/* Layout: tab row for the Looksmaxxing apps; Research is a filterable list of method notes, Planning is the agreed plan as ordered steps that can point back to research. Same dark cyberpunk look as the rest of the hub. */
+:root{color-scheme:dark;
+--bg:#0b0720;--panel:#120a2e;--panel2:#190f3d;--ink:#f3ecff;--mute:#a89cd0;--line:#3a2680;--accent:#b36bff;--cyan:#4de2ff;--hot:#ff4fd8;--lime:#9dff7a;--bad:#ff5c78;--on-accent:#0a0620;
+--display:"Chakra Petch",system-ui,sans-serif;--mono:"Share Tech Mono",ui-monospace,monospace}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--display);font-weight:500;font-size:15px;
+padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:18px 48px;
+background-image:radial-gradient(ellipse at 80% -10%,rgba(179,107,255,.22),transparent 55%),radial-gradient(ellipse at 0% 100%,rgba(255,79,216,.12),transparent 50%)}
+.wrap{max-width:1100px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+header{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 20px}
+h1{margin:0;font-size:26px;letter-spacing:.2em;text-transform:uppercase;text-shadow:0 0 18px rgba(179,107,255,.8),2px 0 rgba(255,79,216,.5),-2px 0 rgba(77,226,255,.4)}
+.crumb{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+.note{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:space-between;font-family:var(--mono);font-size:12px;color:var(--mute);border:1px solid var(--line);background:var(--panel);padding:9px 12px}
+.note b{color:var(--cyan);font-weight:400}
+button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}
+.btn{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;background:var(--panel2);border:1px solid var(--accent);padding:8px 14px;color:var(--ink)}
+.btn:hover{background:var(--accent);color:var(--on-accent)}
+.btn.pri{background:var(--accent);color:var(--on-accent)}.btn.pri:hover{background:var(--cyan);border-color:var(--cyan)}
+.btn.ghost{border-color:var(--line);color:var(--mute)}
+.btn.sm{padding:4px 9px;font-size:11px;border-color:var(--line);color:var(--mute)}.btn.sm:hover{background:var(--bad);border-color:var(--bad);color:#fff}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tab{background:var(--panel);border:1px solid var(--line);padding:10px 16px;font-weight:600;letter-spacing:.04em}
+.tab:hover{border-color:var(--accent)}.tab[aria-selected=true]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.tab.off{border-style:dashed;color:var(--mute);cursor:default}
+.card{background:var(--panel);border:1px solid var(--line);padding:16px;min-width:0}
+.card h2{margin:0 0 12px;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);font-family:var(--mono);font-weight:400;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+label{display:flex;flex-direction:column;gap:4px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);min-width:0;flex:1 1 130px}
+input,select,textarea{background:var(--bg);border:1px solid var(--line);padding:8px 10px;min-width:0;width:100%;font-size:15px}
+textarea{resize:vertical;min-height:64px}
+input:focus,select:focus,textarea:focus{border-color:var(--cyan);outline:none}
+form.row{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:12px}
+.bz{text-align:left;background:var(--panel2);border:1px solid var(--line);border-left:3px solid var(--accent);padding:14px;display:flex;flex-direction:column;gap:6px;color:var(--ink);min-width:0}
+.bz:hover{border-color:var(--accent);border-left-color:var(--cyan)}
+.bz .t{font-size:18px;font-weight:700;overflow-wrap:anywhere}
+.bz .m{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--hot)}
+.bz .d{color:var(--mute);overflow-wrap:anywhere}
+.bz .s{font-family:var(--mono);color:var(--cyan);font-variant-numeric:tabular-nums}
+.pos{color:var(--lime)}.neg{color:var(--bad)}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+td.n,th.n{text-align:right}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);font-weight:400}
+td.w{white-space:normal;overflow-wrap:anywhere;min-width:160px}
+.empty{color:var(--mute);padding:14px;border:1px dashed var(--line);text-align:center}
+.ex{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--mute);border:1px dashed var(--mute);padding:0 4px;margin-left:8px;font-weight:400}
+.bk{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.legend{font-family:var(--mono);font-size:11px;color:var(--mute)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.item{background:var(--panel2);border:1px solid var(--line);border-left:3px solid var(--accent);padding:12px 14px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.item.done{border-left-color:var(--lime)}.item.doing{border-left-color:var(--cyan)}
+.item .t{font-size:17px;font-weight:700;overflow-wrap:anywhere}.item .m{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--hot)}
+.item .d{color:var(--mute);overflow-wrap:anywhere;white-space:pre-wrap}.item .src{font-family:var(--mono);font-size:12px;color:var(--cyan);overflow-wrap:anywhere}
+.stack{display:flex;flex-direction:column;gap:8px}.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:var(--panel);border:1px solid var(--line);padding:5px 10px;color:var(--mute)}
+.chip[aria-pressed=true]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.stat{font-family:var(--mono);color:var(--mute);font-size:12px}
+.ai{border:1px dashed var(--accent);padding:16px;color:var(--mute);display:flex;flex-direction:column;gap:6px}
+.ai b{color:var(--ink);font-family:var(--mono);letter-spacing:.1em;text-transform:uppercase;font-size:12px;font-weight:400}
+</style>
+<div class="wrap">
+  <header><h1>Looksmaxxing</h1><div class="crumb">Hub / Looksmaxxing</div></header>
+  <div class="note" id="note"></div>
+  <div class="tabs" id="tabs" role="tablist" aria-label="Looksmaxxing apps"></div>
+  <div id="view" style="display:flex;flex-direction:column;gap:14px"></div>
+</div>
+<script>
+(function(){
+var KEY="hub.looks.v1",S,TAB="research",FILTER="All";
+function $(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+function uid(){return Math.random().toString(36).slice(2,9)}
+function iso(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+var RS=["To study","Studying","Learned"],PS=["Not started","In progress","Done"];
+function seed(){var r1=uid(),r2=uid();return{plan:{name:"Example plan",summary:"Example. Write the plan you have agreed on here."},
+ research:[{id:r1,title:"Example: skincare routine basics",area:"Skin",status:"Studying",src:"",note:"Example note. Cleanse, treat, moisturize, sunscreen. Add what you learn.",ex:1},{id:r2,title:"Example: posture and neck position",area:"Posture",status:"To study",src:"",note:"Example note.",ex:1}],
+ steps:[{id:uid(),title:"Example: start a morning skincare routine",area:"Skin",status:"In progress",from:r1,note:"Example step.",ex:1},{id:uid(),title:"Example: add daily posture work",area:"Posture",status:"Not started",from:r2,note:"",ex:1}]}}
+try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){S=null}
+if(!S||!S.research)S=seed();
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function field(lbl,id,type,ph,extra){var l=$("label");l.appendChild(document.createTextNode(lbl));var i=$(type==="textarea"?"textarea":"input");i.id=id;if(type!=="textarea")i.type=type;if(ph)i.placeholder=ph;if(extra)for(var k in extra)i.setAttribute(k,extra[k]);l.appendChild(i);return l}
+function sel(lbl,id,opts){var l=$("label");l.appendChild(document.createTextNode(lbl));var s=$("select");s.id=id;opts.forEach(function(o){var op=$("option",null,o.t||o);op.value=o.v!=null?o.v:o;s.appendChild(op)});l.appendChild(s);return l}
+function btn(t,c,fn){var b=$("button","btn "+c,t);b.type="button";b.onclick=fn;return b}
+function exT(x){return x.ex?$("span","ex","EXAMPLE"):null}
+function rById(id){return S.research.filter(function(r){return r.id===id})[0]}
+function render(){
+  var note=$("span");note.innerHTML="Saved in <b>this browser only</b> for now. Everything here is entered by hand.";var N=document.getElementById("note");N.textContent="";N.appendChild(note);
+  var has=S.research.concat(S.steps).some(function(x){return x.ex});
+  if(has)N.appendChild(btn("Clear example data","ghost",function(){S.research=S.research.filter(function(x){return!x.ex});S.steps=S.steps.filter(function(x){return!x.ex});save();render()}));
+  var T=document.getElementById("tabs");T.textContent="";
+  [["research","Research"],["plan","Planning"]].forEach(function(t){var b=$("button","tab",t[1]);b.type="button";b.setAttribute("role","tab");b.setAttribute("aria-selected",TAB===t[0]?"true":"false");b.onclick=function(){TAB=t[0];render()};T.appendChild(b)});
+  [["Facial Scanner","Needs the camera."],["Facial analyzer","Needs your equation."],["Progress","Fills from the analyzer's results."]].forEach(function(n){var b=$("span","tab off",n[0]+" · later");b.title=n[1];T.appendChild(b)});
+  var v=document.getElementById("view");v.textContent="";
+  TAB==="research"?researchView(v):planView(v);
+  var ai=$("div","ai"),ab=$("b",null,TAB==="research"?"AI research assistant":"AI planning assistant");ai.appendChild(ab);
+  ai.appendChild($("span",null,TAB==="research"?"Reserved for your independent AI. Once it is connected you will work with it here to find information and build research documents, which land in the list above.":"Reserved for your independent AI. Once it is connected you will take your research and work with it here to build the implementation plan, which becomes the steps above."));v.appendChild(ai)}
+function researchView(v){
+  var c=$("div","card");c.appendChild($("h2",null,"Add a research note"));var f=$("form","row");
+  [field("Topic","r-t","text","e.g. Jaw and neck posture",{required:"required"}),field("Area","r-a","text","e.g. Skin, Hair, Posture"),sel("Status","r-s",RS),field("Source (link or name)","r-u","text","")].forEach(function(x){f.appendChild(x)});
+  var n=field("Notes","r-n","textarea","What you learned or want to test");n.style.flex="1 1 100%";f.appendChild(n);var a=$("button","btn pri","Add note");a.type="submit";f.appendChild(a);
+  f.onsubmit=function(ev){ev.preventDefault();S.research.unshift({id:uid(),title:f.querySelector("#r-t").value.trim(),area:f.querySelector("#r-a").value.trim()||"General",status:f.querySelector("#r-s").value,src:f.querySelector("#r-u").value.trim(),note:f.querySelector("#r-n").value.trim()});save();render()};c.appendChild(f);v.appendChild(c);
+  var l=$("div","card"),h=$("h2");h.appendChild($("span",null,"Research ("+S.research.length+")"));l.appendChild(h);
+  var chips=$("div","chips");chips.style.marginBottom="12px";["All"].concat(RS).forEach(function(s){var b=$("button","chip",s);b.type="button";b.setAttribute("aria-pressed",FILTER===s?"true":"false");b.onclick=function(){FILTER=s;render()};chips.appendChild(b)});l.appendChild(chips);
+  var rows=S.research.filter(function(r){return FILTER==="All"||r.status===FILTER});
+  if(!rows.length)l.appendChild($("div","empty",S.research.length?"Nothing with that status.":"No notes yet. Add the first one above."));
+  else{var g=$("div","grid");rows.forEach(function(r){var it=$("div","item "+(r.status==="Learned"?"done":r.status==="Studying"?"doing":""));it.appendChild($("div","m",r.area));var t=$("div","t",r.title);var e=exT(r);if(e)t.appendChild(e);it.appendChild(t);
+    if(r.note)it.appendChild($("div","d",r.note));if(r.src)it.appendChild($("div","src",r.src));
+    var used=S.steps.filter(function(s){return s.from===r.id}).length;if(used)it.appendChild($("div","stat","Used in "+used+" plan step"+(used>1?"s":"")));
+    var row=$("div","chips"),st=$("select");st.setAttribute("aria-label","Status of "+r.title);RS.forEach(function(s){var o=$("option",null,s);st.appendChild(o)});st.value=r.status;st.style.width="auto";st.onchange=function(){r.status=st.value;save();render()};row.appendChild(st);
+    row.appendChild(btn("Delete","sm",function(){S.research=S.research.filter(function(x){return x.id!==r.id});S.steps.forEach(function(s){if(s.from===r.id)s.from=""});save();render()}));it.appendChild(row);g.appendChild(it)});l.appendChild(g)}
+  v.appendChild(l)}
+function planView(v){
+  var c=$("div","card");c.appendChild($("h2",null,"The plan"));var f=$("form","row");
+  var n=field("Plan name","p-n","text","");n.querySelector("input").value=S.plan.name||"";var sm=field("Summary (what you agreed on)","p-s","textarea","");sm.querySelector("textarea").value=S.plan.summary||"";sm.style.flex="1 1 100%";
+  f.appendChild(n);f.appendChild(sm);var sv=$("button","btn pri","Save plan");sv.type="submit";f.appendChild(sv);
+  f.onsubmit=function(ev){ev.preventDefault();S.plan={name:f.querySelector("#p-n").value.trim(),summary:f.querySelector("#p-s").value.trim()};save();render()};c.appendChild(f);v.appendChild(c);
+  var d=$("div","card");d.appendChild($("h2",null,"Add a step"));var g=$("form","row");
+  var rs=[{v:"",t:"None"}].concat(S.research.map(function(r){return{v:r.id,t:r.title}}));
+  [field("Step","s-t","text","e.g. Start a morning routine",{required:"required"}),field("Area","s-a","text","e.g. Skin"),sel("Status","s-s",PS),sel("Based on research","s-r",rs)].forEach(function(x){g.appendChild(x)});
+  var nn=field("Details","s-n","textarea","How, how often, what to track");nn.style.flex="1 1 100%";g.appendChild(nn);var ab=$("button","btn pri","Add step");ab.type="submit";g.appendChild(ab);
+  g.onsubmit=function(ev){ev.preventDefault();S.steps.push({id:uid(),title:g.querySelector("#s-t").value.trim(),area:g.querySelector("#s-a").value.trim()||"General",status:g.querySelector("#s-s").value,from:g.querySelector("#s-r").value,note:g.querySelector("#s-n").value.trim()});save();render()};d.appendChild(g);v.appendChild(d);
+  var l=$("div","card"),done=S.steps.filter(function(s){return s.status==="Done"}).length;var h=$("h2");h.appendChild($("span",null,"Steps ("+done+" of "+S.steps.length+" done)"));l.appendChild(h);
+  if(!S.steps.length)l.appendChild($("div","empty","No steps yet. Add the first one above."));
+  else{var st=$("div","stack");S.steps.forEach(function(s,i){var it=$("div","item "+(s.status==="Done"?"done":s.status==="In progress"?"doing":""));it.appendChild($("div","m",(i+1)+" · "+s.area));var t=$("div","t",s.title);var e=exT(s);if(e)t.appendChild(e);it.appendChild(t);
+    if(s.note)it.appendChild($("div","d",s.note));var r=s.from&&rById(s.from);if(r)it.appendChild($("div","src","From research: "+r.title));
+    var row=$("div","chips"),ss=$("select");ss.setAttribute("aria-label","Status of "+s.title);PS.forEach(function(p){ss.appendChild($("option",null,p))});ss.value=s.status;ss.style.width="auto";ss.onchange=function(){s.status=ss.value;save();render()};row.appendChild(ss);
+    function mv(d){return function(){var j=i+d;if(j<0||j>=S.steps.length)return;var x=S.steps[i];S.steps[i]=S.steps[j];S.steps[j]=x;save();render()}}
+    row.appendChild(btn("Up","ghost sm",mv(-1)));row.appendChild(btn("Down","ghost sm",mv(1)));row.appendChild(btn("Delete","sm",function(){S.steps=S.steps.filter(function(x){return x.id!==s.id});save();render()}));it.appendChild(row);st.appendChild(it)});l.appendChild(st)}
+  v.appendChild(l)}
+render();
+})();
+</script>
+
+</body></html>
