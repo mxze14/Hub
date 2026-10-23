@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body style="margin:0">
+<title>Knowledge Hub</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Share+Tech+Mono&display=swap">
+<style>
+/* Layout: tab row for the Knowledge apps. Study Terminal is a topic list with status and notes, plus a reserved AI spot; Tests, Document storage and Document breakdown/Research are marked for later. Same dark cyberpunk look as the rest of the hub. */
+:root{color-scheme:dark;
+--bg:#0b0720;--panel:#120a2e;--panel2:#190f3d;--ink:#f3ecff;--mute:#a89cd0;--line:#3a2680;--accent:#b36bff;--cyan:#4de2ff;--hot:#ff4fd8;--lime:#9dff7a;--bad:#ff5c78;--on-accent:#0a0620;
+--display:"Chakra Petch",system-ui,sans-serif;--mono:"Share Tech Mono",ui-monospace,monospace}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--display);font-weight:500;font-size:15px;
+padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:18px 48px;
+background-image:radial-gradient(ellipse at 80% -10%,rgba(179,107,255,.22),transparent 55%),radial-gradient(ellipse at 0% 100%,rgba(255,79,216,.12),transparent 50%)}
+.wrap{max-width:1100px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+header{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 20px}
+h1{margin:0;font-size:26px;letter-spacing:.2em;text-transform:uppercase;text-shadow:0 0 18px rgba(179,107,255,.8),2px 0 rgba(255,79,216,.5),-2px 0 rgba(77,226,255,.4)}
+.crumb{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+.note{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:space-between;font-family:var(--mono);font-size:12px;color:var(--mute);border:1px solid var(--line);background:var(--panel);padding:9px 12px}
+.note b{color:var(--cyan);font-weight:400}
+button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}
+.btn{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;background:var(--panel2);border:1px solid var(--accent);padding:8px 14px;color:var(--ink)}
+.btn:hover{background:var(--accent);color:var(--on-accent)}
+.btn.pri{background:var(--accent);color:var(--on-accent)}.btn.pri:hover{background:var(--cyan);border-color:var(--cyan)}
+.btn.ghost{border-color:var(--line);color:var(--mute)}
+.btn.sm{padding:4px 9px;font-size:11px;border-color:var(--line);color:var(--mute)}.btn.sm:hover{background:var(--bad);border-color:var(--bad);color:#fff}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tab{background:var(--panel);border:1px solid var(--line);padding:10px 16px;font-weight:600;letter-spacing:.04em}
+.tab:hover{border-color:var(--accent)}.tab[aria-selected=true]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.tab.off{border-style:dashed;color:var(--mute);cursor:default}
+.card{background:var(--panel);border:1px solid var(--line);padding:16px;min-width:0}
+.card h2{margin:0 0 12px;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);font-family:var(--mono);font-weight:400;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+label{display:flex;flex-direction:column;gap:4px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);min-width:0;flex:1 1 130px}
+input,select,textarea{background:var(--bg);border:1px solid var(--line);padding:8px 10px;min-width:0;width:100%;font-size:15px}
+textarea{resize:vertical;min-height:64px}
+input:focus,select:focus,textarea:focus{border-color:var(--cyan);outline:none}
+form.row{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:12px}
+.bz{text-align:left;background:var(--panel2);border:1px solid var(--line);border-left:3px solid var(--accent);padding:14px;display:flex;flex-direction:column;gap:6px;color:var(--ink);min-width:0}
+.bz:hover{border-color:var(--accent);border-left-color:var(--cyan)}
+.bz .t{font-size:18px;font-weight:700;overflow-wrap:anywhere}
+.bz .m{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--hot)}
+.bz .d{color:var(--mute);overflow-wrap:anywhere}
+.bz .s{font-family:var(--mono);color:var(--cyan);font-variant-numeric:tabular-nums}
+.pos{color:var(--lime)}.neg{color:var(--bad)}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+td.n,th.n{text-align:right}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);font-weight:400}
+td.w{white-space:normal;overflow-wrap:anywhere;min-width:160px}
+.empty{color:var(--mute);padding:14px;border:1px dashed var(--line);text-align:center}
+.ex{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--mute);border:1px dashed var(--mute);padding:0 4px;margin-left:8px;font-weight:400}
+.bk{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.legend{font-family:var(--mono);font-size:11px;color:var(--mute)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.item{background:var(--panel2);border:1px solid var(--line);border-left:3px solid var(--accent);padding:12px 14px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.item.done{border-left-color:var(--lime)}.item.doing{border-left-color:var(--cyan)}
+.item .t{font-size:17px;font-weight:700;overflow-wrap:anywhere}.item .m{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--hot)}
+.item .d{color:var(--mute);overflow-wrap:anywhere;white-space:pre-wrap}.item .src{font-family:var(--mono);font-size:12px;color:var(--cyan);overflow-wrap:anywhere}
+.stack{display:flex;flex-direction:column;gap:8px}.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:var(--panel);border:1px solid var(--line);padding:5px 10px;color:var(--mute)}
+.chip[aria-pressed=true]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.stat{font-family:var(--mono);color:var(--mute);font-size:12px}
+.ai{border:1px dashed var(--accent);padding:16px;color:var(--mute);display:flex;flex-direction:column;gap:6px}
+.ai b{color:var(--ink);font-family:var(--mono);letter-spacing:.1em;text-transform:uppercase;font-size:12px;font-weight:400}
+</style>
+<div class="wrap">
+  <header><h1>Knowledge</h1><div class="crumb">Hub / Knowledge / Study Terminal</div></header>
+  <div class="note" id="note"></div>
+  <div class="tabs" id="tabs" role="tablist" aria-label="Knowledge apps"></div>
+  <div id="view" style="display:flex;flex-direction:column;gap:14px"></div>
+</div>
+<script>
+(function(){
+var KEY="hub.knowledge.v1",S,FILTER="All",OPEN=null,ST=["Not started","Studying","Learned"];
+function $(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+function uid(){return Math.random().toString(36).slice(2,9)}
+function iso(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function fd(s){var p=s.split("-");return new Date(+p[0],+p[1]-1,+p[2]).toLocaleDateString(undefined,{month:"short",day:"numeric",year:"2-digit"})}
+try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){S=null}
+if(!S||!S.topics)S={topics:[{id:uid(),title:"Example: how compound interest works",subject:"Finance",status:"Studying",date:iso(new Date()),notes:[{id:uid(),text:"Example note. Interest earns interest, so time matters more than rate early on.",date:iso(new Date())}],ex:1},{id:uid(),title:"Example: intro to Python dictionaries",subject:"Programming",status:"Not started",date:iso(new Date()),notes:[],ex:1}]};
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function field(lbl,id,type,ph,extra){var l=$("label");l.appendChild(document.createTextNode(lbl));var i=$(type==="textarea"?"textarea":"input");i.id=id;if(type!=="textarea")i.type=type;if(ph)i.placeholder=ph;if(extra)for(var k in extra)i.setAttribute(k,extra[k]);l.appendChild(i);return l}
+function sel(lbl,id,opts){var l=$("label");l.appendChild(document.createTextNode(lbl));var s=$("select");s.id=id;opts.forEach(function(o){s.appendChild($("option",null,o))});l.appendChild(s);return l}
+function btn(t,c,fn){var b=$("button","btn "+c,t);b.type="button";b.onclick=fn;return b}
+function render(){
+  var N=document.getElementById("note");N.textContent="";var sp=$("span");sp.innerHTML="Saved in <b>this browser only</b> for now. Everything here is entered by hand.";N.appendChild(sp);
+  if(S.topics.some(function(x){return x.ex}))N.appendChild(btn("Clear example data","ghost",function(){S.topics=S.topics.filter(function(x){return!x.ex});save();render()}));
+  var T=document.getElementById("tabs");T.textContent="";var b=$("button","tab","Study Terminal");b.type="button";b.setAttribute("role","tab");b.setAttribute("aria-selected","true");T.appendChild(b);
+  [["Tests","The AI creates tests from your topics."],["Document storage","Same as the Efficiency app, to be added."],["Document breakdown/Research","Needs the AI."]].forEach(function(n){var x=$("span","tab off",n[0]+" · later");x.title=n[1];T.appendChild(x)});
+  var v=document.getElementById("view");v.textContent="";
+  var c=$("div","card");c.appendChild($("h2",null,"Add a topic to study"));var f=$("form","row");
+  [field("Topic","t-t","text","e.g. How mortgages work",{required:"required"}),field("Subject","t-s","text","e.g. Finance"),sel("Status","t-st",ST)].forEach(function(x){f.appendChild(x)});
+  var a=$("button","btn pri","Add topic");a.type="submit";f.appendChild(a);
+  f.onsubmit=function(ev){ev.preventDefault();S.topics.unshift({id:uid(),title:f.querySelector("#t-t").value.trim(),subject:f.querySelector("#t-s").value.trim()||"General",status:f.querySelector("#t-st").value,date:iso(new Date()),notes:[]});save();render()};c.appendChild(f);v.appendChild(c);
+  var l=$("div","card"),done=S.topics.filter(function(t){return t.status==="Learned"}).length;l.appendChild($("h2",null,"Topics ("+done+" of "+S.topics.length+" learned)"));
+  var chips=$("div","chips");chips.style.marginBottom="12px";["All"].concat(ST).forEach(function(s){var x=$("button","chip",s);x.type="button";x.setAttribute("aria-pressed",FILTER===s?"true":"false");x.onclick=function(){FILTER=s;render()};chips.appendChild(x)});l.appendChild(chips);
+  var rows=S.topics.filter(function(t){return FILTER==="All"||t.status===FILTER});
+  if(!rows.length)l.appendChild($("div","empty",S.topics.length?"No topics with that status.":"No topics yet. Add the first one above."));
+  else{var g=$("div","grid");rows.forEach(function(t){var it=$("div","item "+(t.status==="Learned"?"done":t.status==="Studying"?"doing":""));it.appendChild($("div","m",t.subject+" · added "+fd(t.date)));var ti=$("div","t",t.title);if(t.ex)ti.appendChild($("span","ex","EXAMPLE"));it.appendChild(ti);
+    var row=$("div","chips"),ss=$("select");ss.setAttribute("aria-label","Status of "+t.title);ST.forEach(function(s){ss.appendChild($("option",null,s))});ss.value=t.status;ss.style.width="auto";ss.onchange=function(){t.status=ss.value;save();render()};row.appendChild(ss);
+    row.appendChild(btn((OPEN===t.id?"Hide":"Notes")+" ("+t.notes.length+")","ghost sm",function(){OPEN=OPEN===t.id?null:t.id;render()}));row.appendChild(btn("Delete","sm",function(){S.topics=S.topics.filter(function(x){return x.id!==t.id});save();render()}));it.appendChild(row);
+    if(OPEN===t.id){t.notes.forEach(function(n){var d=$("div","d",n.text);d.style.cssText="border-top:1px dashed var(--line);padding-top:6px";it.appendChild(d);var r=$("div","chips");r.appendChild($("span","stat",fd(n.date)));r.appendChild(btn("Delete note","sm",function(){t.notes=t.notes.filter(function(x){return x.id!==n.id});save();render()}));it.appendChild(r)});
+      var nf=$("form","row");var ni=$("input");ni.placeholder="Add a note";ni.setAttribute("aria-label","New note for "+t.title);ni.required=true;nf.appendChild(ni);var nb=$("button","btn pri","Save note");nb.type="submit";nf.appendChild(nb);nf.onsubmit=function(ev){ev.preventDefault();t.notes.push({id:uid(),text:ni.value.trim(),date:iso(new Date())});save();render()};it.appendChild(nf)}
+    g.appendChild(it)});l.appendChild(g)}
+  v.appendChild(l);
+  var ai=$("div","ai");ai.appendChild($("b",null,"AI study partner"));ai.appendChild($("span",null,"Reserved for your independent AI. Once it is connected it will help you study these topics here, and the Tests app will build tests from them. Nothing is generated yet."));v.appendChild(ai)}
+render();
+})();
+</script>
+
+</body></html>
